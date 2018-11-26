@@ -38,5 +38,4 @@ function searchByKey(arr, searchKey, searchItem) {
 
 console.log(searchByName(fruits, 'Apple'));
 
-
 console.log(searchByKey(fruits, 'color', 'Orange'));
