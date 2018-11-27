@@ -36,36 +36,34 @@ function findChild(obj) {
 var finalResult = {};
 
 function normalize(arr, acc) {
-  var answer = arr.reduce(function (array, val) {
+  var answer = arr.reduce(function (final, val) {
     obj = {};
     obj.id = val.id;
     obj.name = val.name;
     if (val.hasOwnProperty('children')) {
       obj.children = findChild(val);
+      final[obj.id] = obj;
+      normalize(val.children, final);
     } else {
       obj.children = [];
+      final[obj.id] = obj;
     }
 
-    if (val.hasOwnProperty('children')) {
-      array.push(obj);
-      normalize(val.children, array);
-    } else {
-      array.push(obj);
-    }
-    return array;
+
+    return final;
   }, acc);
   return answer;
 }
 
-function arrayToObj(arr){
-  var obj = {};
-  arr.forEach(function(val){
-    obj[val.id] = val;
-  });
-  return obj;
-}
+// function arrayToObj(arr){
+//   var obj = {};
+//   arr.forEach(function(val){
+//     obj[val.id] = val;
+//   });
+//   return obj;
+// }
 
-finalResult = arrayToObj( normalize(data,[]) );
+finalResult =  normalize(data, {}) ;
 console.log('======After Normalization======');
 console.log(finalResult);
 
