@@ -1,0 +1,21 @@
+img {
+  /* width: 100%; */
+  height: 100%;
+  float: left;
+  display: block;
+}
+
+.slider {
+  position: absolute;
+  width: 300000px;
+  height: 450px;
+}
+
+.container-wrapper {
+  width: 800px;
+  height: 450px;
+  overflow: hidden;
+  position: relative;
+  margin: 20px auto;
+  box-shadow: 0 0 10px black;
+}
