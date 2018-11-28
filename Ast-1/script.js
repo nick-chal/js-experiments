@@ -1,60 +1,64 @@
-console.log('aple');
+var slider = document.getElementsByClassName('slider')[0];
+var rightArrow = document.getElementById('right-arrow');
+var leftArrow = document.getElementById('left-arrow');
 
 var imageWidth = 800;
-var imageNum = 3;
+var imageNum = slider.getElementsByTagName('img').length;
+
 var x = 0;
-var speed = 1;
-var delta = 2;
-var slider = document.getElementsByClassName('slider')[0];
+var speed = 5;
+var delta = 1;
+
+var mainTimeout;
+var buttonTimeInterval;
+
+rightArrow.addEventListener('click', function () {
+	buttonSlide(1);
+});
+
+leftArrow.addEventListener('click', function () {
+
+	buttonSlide(-1);
+})
+
+// @timeout milaune runall ma parameter
+
+function buttonSlide(d) {
+	delta = d;
+	clearInterval(mainInterval);
+	clearInterval(buttonTimeInterval);
+	clearTimeout(mainTimeout);
+
+	if ((x >= imageWidth * (imageNum - 1) && delta === 1) || (x === 0 && delta === -1)) {
+		clearInterval(mainInterval);
+		runAll(0);
+	} else {
+		runAll(0);
+	}
+}
+
 
 function slide() {
+	slider.style.left = '-' + x + 'px';
+	x += (speed * delta);
 
-  slider.style.left = '-' + x + 'px';
-  if (x == imageWidth * 2) {
-    clearInterval(mainInterval);
-    waitMore();
-  } else if ((x) == 0 || x == 800) {
-    clearInterval(mainInterval);
-    waitTime();
-  }
-  x = x + (speed * delta);
+	if (x >= imageWidth * (imageNum - 1)) delta = -1;
+	else if (x <= 0) delta = 1;
+
+	if (x % imageWidth === 0) {
+		slider.style.left = '-' + x + 'px';
+		clearInterval(mainInterval);
+		runAll(2000);
+	}
 }
 
-function waitTime() {
-  //console.log(x);
-  setTimeout(runAll, 2000);
-
-}
-
-function waitMore() {
-  setTimeout(initiateRestart, 2000);
-}
-
-var restartInterval;
-
-function initiateRestart() {
-  delta = -4;
-  console.log(x);
-  x = 1600;
-  restartInterval = setInterval(restart, 4);
-}
-
-function restart() {
-  slider.style.left = '-' + x + 'px';
-  x = x + (speed * delta);
-  if (x == 0) {
-    clearInterval(restartInterval);
-    x = 0;
-    delta = 2
-    runAll();
-  }
-}
 
 var mainInterval;
 
-function runAll() {
-  mainInterval = setInterval(slide, 4);
+function runAll(timeLimit) {
+	mainTimeout = setTimeout(function () {
+		mainInterval = setInterval(slide, 4);
+	}, timeLimit);
 }
 
-runAll();
-// setTimeout(runAll, 3000);
+runAll(2000);

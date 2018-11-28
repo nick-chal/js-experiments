@@ -33,7 +33,6 @@ function findChild(obj) {
   return childArray;
 }
 
-var finalResult = {};
 
 function normalize(arr, acc) {
   var answer = arr.reduce(function (final, val) {
@@ -49,44 +48,12 @@ function normalize(arr, acc) {
       final[obj.id] = obj;
     }
 
-
     return final;
   }, acc);
   return answer;
 }
 
-// function arrayToObj(arr){
-//   var obj = {};
-//   arr.forEach(function(val){
-//     obj[val.id] = val;
-//   });
-//   return obj;
-// }
+finalResult = normalize(data, {});
 
-finalResult =  normalize(data, {}) ;
 console.log('======After Normalization======');
 console.log(finalResult);
-
-// function normalize(arr) {
-//   var answer = arr.forEach(function (val) {
-//     var obj = {};
-    
-//     obj.id = val.id;
-//     obj.name = val.name;
-//     if (val.hasOwnProperty('children')) {
-//       obj.children = findChild(val);
-//     } else {
-//       obj.children = [];
-//     }
-
-//     if (val.hasOwnProperty('children')) {
-//       finalResult[val.id] = obj;
-//       normalize(val.children);
-//     } else {
-//       finalResult[val.id] = obj;
-//     }
-//   });
-// }
-
-// normalize(data);
-// console.log(finalResult);
