@@ -1,6 +1,7 @@
 var slider = document.getElementsByClassName('slider')[0];
 var rightArrow = document.getElementById('right-arrow');
 var leftArrow = document.getElementById('left-arrow');
+var navButtons = document.getElementsByClassName('dot-container')[0].getElementsByTagName('span');
 
 var imageWidth = 800;
 var imageNum = slider.getElementsByTagName('img').length;
@@ -17,11 +18,42 @@ rightArrow.addEventListener('click', function () {
 });
 
 leftArrow.addEventListener('click', function () {
-
 	buttonSlide(-1);
 })
 
-// @timeout milaune runall ma parameter
+for (var i = 0; i < navButtons.length; i++) {
+	navButtons[i].addEventListener('click', function (e) {
+		navSlide(e);
+	})
+}
+
+var navIndex;
+
+function navSlide(event) {
+	clearInterval(mainInterval);
+	clearInterval(buttonTimeInterval);
+	clearTimeout(mainTimeout);
+	navIndexPosition = (parseInt(event.target.className.slice('10', event.target.className.length)) - 1) * imageWidth;
+
+	if (navIndexPosition === x) {
+		runAll(2000);
+	} else {
+		if (navIndexPosition < x) delta = -1;
+		else delta = 1;
+		buttonTimeInterval = setInterval(function () {
+
+			slider.style.left = '-' + x + 'px';
+			if (x === navIndexPosition) {
+				clearInterval(buttonTimeInterval);
+				runAll(2000);
+			} else {
+				x += (speed * delta);
+			}
+
+		}, 4)
+	}
+
+}
 
 function buttonSlide(d) {
 	delta = d;
