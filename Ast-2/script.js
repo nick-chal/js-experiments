@@ -1,10 +1,15 @@
-function Ball(number) {
-  this.balls = [];
+var MIN_SIZE = 15;
+var MAX_SIZE = 40;
+var BOX_LIMIT = 50;
+var CANVAS_HEIGHT = 500;
+var CANVAS_WIDTH = 950;
+
+function Game(number, type) {
+  var balls = [];
   var container = document.getElementsByClassName('container')[0];
   var ballInterval;
-  var deltaX = 1;
-  var deltaY = 1;
   var moving = false;
+  var type = type;
   that = this;
 
   this.toggle = function () {
@@ -17,79 +22,86 @@ function Ball(number) {
     }
   }
 
-  this.draw = function () {
+  this.init = function () {
+    container.style.width = CANVAS_WIDTH + 'px';
+    container.style.height = CANVAS_HEIGHT + 'px';
     for (var i = 0; i < number; i++) {
       var childBall = createBall();
-      that.balls.push(childBall);
-      container.appendChild(that.balls[i].element);
+      balls.push(childBall);
+      container.appendChild(balls[i].element);
       //'rbg(' + randomGenerator(0, 255) + ',' + randomGenerator(0, 255) + ',' + randomGenerator(0, 255) + ')';
     }
     //console.log(balls);
 
-    that.toggle();
+    this.toggle();
 
 
   }
-
 
 
   function moveBall(i) {
-    var boundaryPosition = checkBoundary(that.balls[i]);
+    var boundaryPosition = checkBoundary(balls[i]);
+    var collision;
     switch (boundaryPosition) {
       case 1:
-        that.balls[i].deltaX *= -1;
+        balls[i].deltaX *= -1;
         break;
       case 2:
-        that.balls[i].deltaY *= -1;
+        balls[i].deltaY *= -1;
         break;
       default:
-        if (!checkCollision(that.balls[i], 0, that.balls.length, i)) {
-          that.balls[i].element.style.left = that.balls[i].x + 'px';
-          that.balls[i].element.style.top = that.balls[i].y + 'px';
+        if (type === 'box') {
+          collision = checkCollisionBox(balls[i], 0, balls.length, i)
         } else {
-          that.balls[i].deltaX *= -1;
-          that.balls[i].deltaY *= -1;
+          collision = checkCollisionBall(balls[i], 0, balls.length, i)
         }
+        if (collision) {
+          balls[i].deltaX *= -1;
+          balls[i].deltaY *= -1;
+
+        }
+
     }
-    that.balls[i].x += (that.balls[i].deltaX * that.balls[i].speedX);
-    that.balls[i].y += (that.balls[i].deltaY * that.balls[i].speedY);
+    balls[i].x += (balls[i].deltaX * balls[i].speedX);
+    balls[i].y += (balls[i].deltaY * balls[i].speedY);
+
+    if (type === 'ball') {
+      balls[i].centerX = balls[i].x + balls[i].radius;
+      balls[i].centerY = balls[i].y + balls[i].radius;
+    }
+
+    balls[i].draw();
+
   }
 
   function moveAll() {
-    for (var i = 0; i < that.balls.length; i++) {
+    for (var i = 0; i < balls.length; i++) {
       moveBall(i);
     }
   }
 
 
   function createBall() {
-    var run = false;
+    var correctStart = false;
     do {
-      var obj = {};
-      obj.element = document.createElement('div');
-      obj.radius = randomGenerator(10, 25);
-      obj.x = randomGenerator(5, 640);
-      obj.y = randomGenerator(5, 340);
-      run = checkCollision(obj, 0, that.balls.length, -1);
-      obj.speedX = randomGenerator(.5, 3);
-      obj.speedY = randomGenerator(.5, 3);
-      obj.deltaX = randomGenerator(0, 10) < 5 ? 1 : -1;
-      obj.deltaY = randomGenerator(0, 10) < 5 ? 1 : -1;
-      obj.element.style.position = 'absolute';
-      obj.element.style.left = obj.x + 'px';
-      obj.element.style.top = obj.y + 'px';
-      obj.element.style.height = obj.radius + 'px';
-      obj.element.style.width = obj.radius + 'px';
-      obj.element.style.backgroundColor = 'black';
-    } while (run);
+      if (type === 'box') {
+        var obj = new Box();
+        obj.boxProperties();
+        correctStart = checkCollisionBox(obj, 0, balls.length, -1);
+      } else {
+        var obj = new Ball();
+        obj.ballProperties();
+        correctStart = checkCollisionBall(obj, 0, balls.length, -1);
+      }
+
+    } while (correctStart);
     return obj;
   }
 
-  function checkCollision(obj, start, end, position) {
+  function checkCollisionBox(obj, start, end, position) {
     for (var i = start; i < end; i++) {
       if (position !== i) {
-        if (obj.x <= (that.balls[i].x + that.balls[i].radius) && (obj.x + obj.radius) >= that.balls[i].x && obj.y <= (that.balls[i].y + that.balls[i].radius) && (obj.y + obj.radius) >= that.balls[i].y) {
-          console.log('collide');
+        if (obj.x <= (balls[i].x + balls[i].radius) && (obj.x + obj.radius) >= balls[i].x && obj.y <= (balls[i].y + balls[i].radius) && (obj.y + obj.radius) >= balls[i].y) {
           return true;
         }
       }
@@ -98,20 +110,123 @@ function Ball(number) {
     return false;
   }
 
+  function checkCollisionBall(obj, start, end, position) {
+    for (var i = start; i < end; i++) {
+      if (position !== i) {
+        var centerDistanceX = obj.centerX - balls[i].centerX;
+        var centerDistanceY = obj.centerY - balls[i].centerY;
+        var collisionDistance = parseFloat((obj.radius + balls[i].radius) / 2);
+        var centerDistance = centerDistanceX * centerDistanceX + centerDistanceY * centerDistanceY;
+        if (Math.sqrt(centerDistance) <= collisionDistance) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   function checkBoundary(obj) {
-    if (obj.x <= 0 || (obj.x + obj.radius) >= 700) return 1
-    else if (obj.y <= 0 || (obj.y + obj.radius) >= 400) return 2
+    if (obj.x <= 0 || (obj.x + obj.radius) >= CANVAS_WIDTH) return 1
+    else if (obj.y <= 0 || (obj.y + obj.radius) >= CANVAS_HEIGHT) return 2
     return 3;
   }
 
 }
 
-function randomGenerator(start, end) {
-  return Math.floor(Math.random() * end) + start;
+
+
+function Box() {
+  this.element = document.createElement('div');
+  this.radius = randomGenerator(MIN_SIZE, MAX_SIZE);
+  this.x = randomGenerator(5, CANVAS_WIDTH - 55);
+  this.y = randomGenerator(5, CANVAS_HEIGHT - 55);
+  this.speedX = randomGenerator(.5, 2);
+  this.speedY = randomGenerator(.5, 2);
+  this.deltaX = randomGenerator(1, 10) < 5 ? 1 : -1;
+  this.deltaY = randomGenerator(1, 10) < 5 ? 1 : -1;
+
+  this.boxProperties = function () {
+    this.element.classList.add('box');
+    this.element.style.position = 'absolute';
+    this.element.style.borderRadius = '0%';
+    this.element.style.height = this.radius + 'px';
+    this.element.style.width = this.radius + 'px';
+    this.element.style.backgroundColor = 'rgb(' + randomColor() + ')';
+  }
+
+  this.draw = function () {
+
+    this.element.style.left = this.x + 'px';
+    this.element.style.top = this.y + 'px';
+  }
+
 }
 
-var ball = new Ball(10);
-ball.draw();
 
-button = document.getElementsByTagName('button')[0];
-button.addEventListener('click', ball.toggle);
+function Ball() {
+
+  this.element = document.createElement('div');
+  this.radius = randomGenerator(MIN_SIZE, MAX_SIZE);
+  this.x = randomGenerator(5, CANVAS_WIDTH - 55);
+  this.y = randomGenerator(5, CANVAS_HEIGHT - 55);
+  this.speedX = randomGenerator(.5, 2);
+  this.speedY = randomGenerator(.5, 2);
+  this.deltaX = randomGenerator(1, 10) < 5 ? 1 : -1;
+  this.deltaY = randomGenerator(1, 10) < 5 ? 1 : -1;
+  this.centerX = this.x + this.radius;
+  this.centerY = this.y + this.radius;
+
+  this.ballProperties = function () {
+    this.element.classList.add('ball');
+    this.element.style.position = 'absolute';
+    this.element.style.borderRadius = '50%';
+    this.element.style.height = this.radius + 'px';
+    this.element.style.width = this.radius + 'px';
+    this.element.style.backgroundColor = 'rgb(' + randomColor() + ')';
+  }
+
+  this.draw = function () {
+    this.element.style.left = this.x + 'px';
+    this.element.style.top = this.y + 'px';
+  }
+}
+
+
+function randomGenerator(start, end) {
+  return Math.floor(Math.random() * (end - start + 1)) + start;
+}
+
+function randomColor() {
+  var red = randomGenerator(0, 255);
+  var green = randomGenerator(0, 255);
+  var blue = randomGenerator(0, 255);
+  return red + "," + green + ',' + blue;
+}
+
+var ballButton = document.getElementById('ball');
+var boxButton = document.getElementById('box');
+
+ballButton.addEventListener('click', function () {
+  var container = document.getElementsByClassName('container')[0];
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+  var game = new Game(BOX_LIMIT, 'ball');
+  game.init();
+  button = document.getElementById('toggle');
+  button.addEventListener('click', game.toggle);
+  button.style.display = 'inline-block';
+})
+
+boxButton.addEventListener('click', function () {
+  var container = document.getElementsByClassName('container')[0];
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+
+  var game = new Game(BOX_LIMIT, 'box');
+  game.init();
+  button = document.getElementById('toggle');
+  button.addEventListener('click', game.toggle);
+  button.style.display = 'inline-block';
+})

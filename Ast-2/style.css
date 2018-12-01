@@ -1,11 +1,26 @@
 .container {
-  height: 400px;
-  width: 700px;
   position: relative;
   border: 2px solid black;
-  margin: 75px auto;
+  margin: 75px auto 0;
+}
+
+div {
+  margin: 1px auto;
 }
 
 button {
-  margin: 0 auto;
+  padding: 5px;
+}
+
+#ball {
+  margin-left: 35%;
+}
+
+#box {
+  margin-left: 20%;
+}
+
+#toggle {
+  margin-left: 45%;
+  display: none;
 }
