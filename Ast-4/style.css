@@ -1,0 +1,9 @@
+.main-container {
+  margin: 70px auto 0;
+  box-shadow: 0px 0px 10px black;
+  width: 1000px;
+  height: 550px;
+  position: relative;
+  overflow: hidden;
+  font-size: 24px;
+}
