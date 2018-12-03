@@ -13,7 +13,7 @@ function Bird() {
   this.y = CANVAS_HEIGHT / 2;
   this.counter = 0;
 
-  this.speed = 0;
+  this.speed = -4;
   this.gravity = 1.2;
   this.upForce = 20;
 
@@ -63,9 +63,6 @@ function Bird() {
       this.rotation = -30;
     }
 
-
-
-
     this.counter++;
 
     if (this.y + 32 >= CANVAS_HEIGHT) {
@@ -84,7 +81,7 @@ function Bird() {
   }
 
   this.goUp = function () {
-    this.speed -= this.upForce;
+    this.speed = -this.upForce;
     this.rotation = -5;
     // if (this.speed < -35) this.speed = 1;
   }
@@ -341,8 +338,6 @@ function Game() {
       that.gameInit();
     }
   });
-
-
 }
 
 
