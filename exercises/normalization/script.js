@@ -26,10 +26,10 @@ console.log(data);
 
 
 function findChild(obj) {
-  childArray = [];
-  obj.children.forEach(function (value) {
-    childArray.push(value.id);
-  });
+  var childArray = obj.children.reduce(function (acc, value) {
+    acc.push(value.id);
+    return acc;
+  }, []);
   return childArray;
 }
 
@@ -39,15 +39,12 @@ function normalize(arr, acc) {
     obj = {};
     obj.id = val.id;
     obj.name = val.name;
+    obj.children = []
+    final[obj.id] = obj;
     if (val.hasOwnProperty('children')) {
-      obj.children = findChild(val);
-      final[obj.id] = obj;
+      final[obj.id].children = findChild(val);
       normalize(val.children, final);
-    } else {
-      obj.children = [];
-      final[obj.id] = obj;
     }
-
     return final;
   }, acc);
   return answer;
