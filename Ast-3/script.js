@@ -313,6 +313,18 @@ function Game() {
     }
   }
 
+  container.addEventListener('click', function () {
+    if (!gameOver && !gameInitial) {
+      bird.goUp();
+    }
+  });
+
+  container.addEventListener('touch', function () {
+    if (!gameOver && !gameInitial) {
+      bird.goUp();
+    }
+  });
+
   document.addEventListener('keydown', function (event) {
     if (event.keyCode === 32 && !gameOver && !gameInitial) bird.goUp();
 
