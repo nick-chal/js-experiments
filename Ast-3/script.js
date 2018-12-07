@@ -313,43 +313,46 @@ function Game() {
     }
   }
 
-  container.addEventListener('click', function () {
-    if (!gameOver && !gameInitial) {
-      bird.goUp();
-    }
-  });
-
-  container.addEventListener('touch', function () {
-    if (!gameOver && !gameInitial) {
-      bird.goUp();
-    }
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.keyCode === 32 && !gameOver && !gameInitial) bird.goUp();
-
-  });
-
-  document.addEventListener('keyup', function (event) {
-    if (event.keyCode === 32 && gameInitial) {
-      msgBoard.style.display = 'none';
-      gameInitial = false;
-      gameStartSign.style.display = 'none';
-      mainInterval = setInterval(run, 30);
-    } else if (event.keyCode === 32 && gameOver && !birdFalling) {
-      msgBoard.style.display = 'block';
-      gameStartSign.style.display = 'block';
-      gameOverSign.style.display = 'none';
-      gameInitial = true;
-      gameOver = false;
-      clearInterval(mainInterval);
-      container.removeChild(bird.element);
-      for (var i = 0; i < pipes.length; i++) {
-        pipes[i].remove();
+  function eventMove(event) {
+    if (event.type == 'keydown' && event.keyCode === 32) {
+      if (!gameOver && !gameInitial) {
+        bird.goUp();
       }
-      that.gameInit();
     }
-  });
+  }
+
+  function eventStart() {
+    if ((event.type == 'keyup' && event.keyCode === 32) || event.type == 'click' || event.type == 'touch') {
+      if (gameInitial) {
+        msgBoard.style.display = 'none';
+        gameInitial = false;
+        gameStartSign.style.display = 'none';
+        mainInterval = setInterval(run, 30);
+      } else if (gameOver && !birdFalling) {
+        msgBoard.style.display = 'block';
+        gameStartSign.style.display = 'block';
+        gameOverSign.style.display = 'none';
+        gameInitial = true;
+        gameOver = false;
+        clearInterval(mainInterval);
+        container.removeChild(bird.element);
+        for (var i = 0; i < pipes.length; i++) {
+          pipes[i].remove();
+        }
+        that.gameInit();
+      } else if (!gameOver && !gameInitial && event.type != 'keyup') {
+        bird.goUp();
+      }
+    }
+  }
+
+  container.addEventListener('click', eventStart);
+
+  container.addEventListener('touch', eventStart);
+
+  document.addEventListener('keydown', eventMove);
+
+  document.addEventListener('keyup', eventStart);
 }
 
 
