@@ -348,7 +348,7 @@ function Game() {
 
   container.addEventListener('click', eventStart);
 
-  container.addEventListener('touch', eventStart);
+  container.addEventListener('touchend', eventStart);
 
   document.addEventListener('keydown', eventMove);
 
