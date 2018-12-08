@@ -322,7 +322,7 @@ function Game() {
   }
 
   function eventStart() {
-    if ((event.type == 'keyup' && event.keyCode === 32) || event.type == 'click' || event.type == 'touch') {
+    if ((event.type == 'keyup' && event.keyCode === 32) || event.type == 'click' || event.type == 'touchstart') {
       if (gameInitial) {
         msgBoard.style.display = 'none';
         gameInitial = false;
@@ -348,7 +348,7 @@ function Game() {
 
   container.addEventListener('click', eventStart);
 
-  container.addEventListener('touchend', eventStart);
+  container.addEventListener('touchstart', eventStart);
 
   document.addEventListener('keydown', eventMove);
 
