@@ -94,9 +94,9 @@ function Game() {
       if (counter % 50 === 0) {
         var word = new Word();
         word.init();
-        if ((score + 1) % 5 == 0 && score <= 28) {
+        if ((score + 1) % 5 == 0 && score <= 40) {
           clearInterval(mainInterval);
-          speedCount -= score < 30 ? 10 : 5;
+          speedCount -= score <= 26 ? 10 : 3;
           mainInterval = setInterval(run, speedCount);
           console.log(speedCount);
         }
@@ -117,20 +117,44 @@ function Game() {
     }
   }
 
+  var highlight = function (event) {
+    if (event == 16 || event == 18 || event == 17) {
+      var item = document.getElementsByClassName('a' + event);
+      for (var i = 0; i < item.length; i++) item[i].style.background = '#a6fd29';
+    } else {
+      var item = document.getElementById('a' + event);
+      item.style.background = '#a6fd29';
+    }
+  }
+
+  var upEvent = function (event) {
+
+  }
 
   var pressEvent = function (event) {
+    var code = event.keyCode;
+    highlight(code);
+    setTimeout(function () {
+      if (code == 16 || code == 18 || code == 17) {
+        var item = document.getElementsByClassName('a' + code);
+        for (var i = 0; i < item.length; i++) item[i].style.background = '#dfdfdf';
+      } else {
+        var item = document.getElementById('a' + code);
+        item.style.background = '#dfdfdf';
+      }
+    }, 250);
     if (!gameOver && !gameInitial) {
-      if (event.keyCode >= 65 && event.keyCode <= 90) {
-        typedList.push((String.fromCharCode(event.keyCode)).toLowerCase());
+      if (code >= 65 && code <= 90) {
+        typedList.push((String.fromCharCode(code)).toLowerCase());
         updateInsert();
-      } else if (event.keyCode === 8 || event.keyCode === 46) {
+      } else if (code === 8 || code === 46) {
         typedList.pop();
         updateInsert();
-      } else if (event.keyCode === 13) {
+      } else if (code === 13) {
         checkComplete();
       }
     } else if (gameInitial) {
-      if (event.keyCode === 32) {
+      if (code === 32) {
         wordList.forEach(function (word) {
           word.remove();
         })

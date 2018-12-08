@@ -1,3 +1,7 @@
+body {
+  background: #79a09d;
+}
+
 .main-container {
   margin: 5px auto;
   box-shadow: 0px 0px 10px black;
@@ -6,7 +10,8 @@
   position: relative;
   overflow: hidden;
   font-size: 24px;
-  background: gray;
+  background: #c5c5c5;
+  ;
 }
 
 .main-container div {
@@ -18,7 +23,7 @@
   top: 35%;
   left: 37%;
   z-index: 100;
-  background: red;
+  background: rgb(124, 29, 29);
   text-align: center;
   color: white;
 }
@@ -53,4 +58,48 @@
   box-shadow: 0px 0px 10px black;
   height: 1.5em;
   text-align: center;
+  background: #dfdfdf;
+}
+
+
+
+.keyboard {
+  width: 768.75px;
+  margin: 2px auto;
+}
+
+.key-row {
+  width: 100%;
+}
+
+.keyboard-container {
+  width: 100%;
+}
+
+.keyboard-container .keyboard-btn {
+  width: 51.25px;
+  height: 51.25px;
+  border: 1px solid gray;
+  background: #dfdfdf;
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 51.25px;
+  float: left;
+}
+
+.keyboard-container .three {
+  width: 76.875px;
+}
+
+.keyboard-container .four {
+  width: 102.5px;
+}
+
+.keyboard-container .five {
+  width: 128.125px;
+}
+
+.keyboard-container .space {
+  width: 461.25px;
 }
