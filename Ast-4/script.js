@@ -49,8 +49,8 @@ function Word() {
 
   this.updateSpan = function (num = length) {
     for (var i = 0; i < length; i++) {
-      this.span[i].style.background = (i < num) ? 'cornflowerblue ' : 'white';
-      this.span[i].style.textDecoration = (i < num) ? 'line-through' : 'none';
+      this.span[i].style.background = (i < num) ? 'cornflowerblue ' : '';
+      this.span[i].style.textDecoration = (i < num) ? 'line-through' : '';
     }
   }
 
@@ -72,6 +72,8 @@ function Game() {
 
   this.gameRun = function () {
     document.addEventListener('keydown', pressEvent);
+    document.addEventListener('click', pressEvent);
+    document.addEventListener('touchstart', pressEvent);
     gameInit();
   }
 
@@ -82,8 +84,8 @@ function Game() {
     score = 0;
     speedCount = 90;
     gameOver = false;
-    textDisplay.textContent = "";
-    textDisplay.style.color = 'black';
+    textDisplay.textContent = '';
+    textDisplay.style.color = '';
     scoreDisplay.textContent = score;
   }
 
@@ -117,32 +119,29 @@ function Game() {
     }
   }
 
-  var highlight = function (event) {
+  var highlight = function (event, color) {
     if (event == 16 || event == 18 || event == 17) {
       var item = document.getElementsByClassName('a' + event);
-      for (var i = 0; i < item.length; i++) item[i].style.background = '#a6fd29';
+      for (var i = 0; i < item.length; i++) item[i].style.background = color;
     } else {
       var item = document.getElementById('a' + event);
-      item.style.background = '#a6fd29';
+      item.style.background = color;
     }
   }
 
-  var upEvent = function (event) {
-
-  }
-
   var pressEvent = function (event) {
-    var code = event.keyCode;
-    highlight(code);
-    setTimeout(function () {
-      if (code == 16 || code == 18 || code == 17) {
-        var item = document.getElementsByClassName('a' + code);
-        for (var i = 0; i < item.length; i++) item[i].style.background = '#dfdfdf';
-      } else {
-        var item = document.getElementById('a' + code);
-        item.style.background = '#dfdfdf';
-      }
-    }, 250);
+    if (event.type == 'keydown') var code = event.keyCode;
+    else if (event.type == 'click' || event.type == 'touchstart') {
+      var code = parseInt(event.srcElement.id.split("a")[1]);
+    }
+    try {
+      highlight(code, '#a6fd29');
+      setTimeout(function () {
+        highlight(code, '')
+      }, 250);
+    } catch (err) {
+      console.log("Sorry This key is not SUPPORTED!!");
+    }
     if (!gameOver && !gameInitial) {
       if (code >= 65 && code <= 90) {
         typedList.push((String.fromCharCode(code)).toLowerCase());

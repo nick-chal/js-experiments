@@ -6,12 +6,12 @@ body {
   margin: 5px auto;
   box-shadow: 0px 0px 10px black;
   width: 75%;
-  padding-bottom: 28%;
+  padding-bottom: 27%;
   position: relative;
   overflow: hidden;
   font-size: 24px;
   background: #c5c5c5;
-  ;
+  border-radius: 1em;
 }
 
 .main-container div {
@@ -26,6 +26,7 @@ body {
   background: rgb(124, 29, 29);
   text-align: center;
   color: white;
+  border-radius: 1em;
 }
 
 .msg h2 {
@@ -37,7 +38,7 @@ body {
 }
 
 .below {
-  width: 75%;
+  width: 73%;
   margin: 5px auto;
 }
 
@@ -61,10 +62,8 @@ body {
   background: #dfdfdf;
 }
 
-
-
 .keyboard {
-  width: 768.75px;
+  width: 75%;
   margin: 2px auto;
 }
 
@@ -77,29 +76,33 @@ body {
 }
 
 .keyboard-container .keyboard-btn {
-  width: 51.25px;
-  height: 51.25px;
+  width: 6.666667%;
   border: 1px solid gray;
   background: #dfdfdf;
   border-radius: 0.25em;
   box-sizing: border-box;
   text-align: center;
-  line-height: 51.25px;
+  line-height: 3.1em;
   float: left;
+  cursor: pointer;
+}
+
+.keyboard-container .keyboard-btn:hover {
+  background: #a5a4a4;
 }
 
 .keyboard-container .three {
-  width: 76.875px;
+  width: 10%;
 }
 
 .keyboard-container .four {
-  width: 102.5px;
+  width: 13.333333%;
 }
 
 .keyboard-container .five {
-  width: 128.125px;
+  width: 16.666667%;
 }
 
 .keyboard-container .space {
-  width: 461.25px;
+  width: 60%;
 }
