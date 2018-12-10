@@ -100,7 +100,6 @@ function Game() {
           clearInterval(mainInterval);
           speedCount -= score <= 26 ? 10 : 3;
           mainInterval = setInterval(run, speedCount);
-          console.log(speedCount);
         }
         word.speed = 2;
         wordList.push(word);
@@ -176,27 +175,25 @@ function Game() {
           }
         }
         wordList[i].remove();
-        textDisplay.textContent = "";
-        typedList = [];
         wordList.splice(i, 1);
         score++;
         scoreDisplay.textContent = score;
         break;
       }
     }
+    textDisplay.textContent = "";
+    typedList = [];
   }
 
   var checkMatch = function () {
     var textLength = typedList.length;
     for (var i = 0; i < wordList.length; i++) {
-      if (wordList[i].charArray.slice(0, textLength).join("") === typedList.join("")) {
+      if (wordList[i].charArray.slice(0, textLength).join("") === typedList.join("") && typedList.join("") != "") {
         wordList[i].updateSpan(textLength);
         wordList[i].updated = true;
-      } else {
-        if (wordList[i].updated) {
-          wordList[i].updateSpan(0);
-          wordList[i].updated = false;
-        }
+      } else if (wordList[i].updated === true) {
+        wordList[i].updateSpan(0);
+        wordList[i].updated = false;
       }
     }
   }
