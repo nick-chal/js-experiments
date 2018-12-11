@@ -92,6 +92,8 @@ body {
   background: #a5a4a4;
 }
 
+@media only screen and (max-width: 480px) {}
+
 .keyboard-container .three {
   width: 10%;
 }

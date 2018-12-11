@@ -130,7 +130,7 @@ function Game() {
 
   var pressEvent = function (event) {
     if (event.type == 'keydown') var code = event.keyCode;
-    else if (event.type == 'click' || event.type == 'touchstart') {
+    else if (event.type == 'click') {
       var code = parseInt(event.srcElement.id.split("a")[1]);
     }
     try {
